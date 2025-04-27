@@ -21,7 +21,7 @@ app.use(cookieParser());
 app.use(
    cors({
       credentials: true,
-      origin: "https://scanner-p0y1wh7h5-arunava-paris-projects.vercel.app/",
+      origin: "https://scanner-p0y1wh7h5-arunava-paris-projects.vercel.app",
    })
 );
 
