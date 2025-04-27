@@ -47,7 +47,7 @@ app.get("/test", (req, res) => {
  app.post("/scanner", async (req, res) => {
    try {
       const scanDetails = req.body;
-   console.log("sad",scanDetails)
+   console.log("scanned data",scanDetails)
    } catch (error) {
       console.error("Error creating scan:", error);
       return res.status(500).json({ error: "Failed to create scan" });
