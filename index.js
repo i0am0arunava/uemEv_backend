@@ -10,6 +10,7 @@ const multer = require("multer");
 const path = require("path");
 
 const Ticket = require("./models/Ticket");
+const Scan = require("./models/Scan");
 
 const app = express();
 
@@ -43,17 +44,30 @@ app.get("/test", (req, res) => {
 });
 
 
-//edited 
- app.post("/scanner", async (req, res) => {
+app.post("/scanner", async (req, res) => {
    try {
       const scanDetails = req.body;
-   console.log("sadscanner",scanDetails)
-   console.log("sadscanner",typeof(scanDetails))
+      console.log("Received scan details:", scanDetails);
+
+      // Check if eventId already exists
+      const existingScan = await Scan.findOne({ eventId: scanDetails.eventId });
+
+      if (existingScan) {
+         // eventId already exists, do not save
+         return res.status(200).json({ success: false, message: "eventId already exists" });
+      }
+
+      // eventId does not exist, create and save
+      const newScan = new Scan(scanDetails);
+      await newScan.save();
+
+      return res.status(201).json({ success: true, message: "Scan saved successfully", data: newScan });
    } catch (error) {
       console.error("Error creating scan:", error);
-      return res.status(500).json({ error: "Failed to create scan" });
+      return res.status(500).json({ success: false, error: "Failed to create scan" });
    }
 });
+
 
 app.post("/register", async (req, res) => {
    const { name, email, password,userRole } = req.body;
@@ -501,7 +515,7 @@ app.get('/tickitUser', async (req, res) => {
 
 
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
    console.log(`Server is running on port ${PORT}`);
 });
