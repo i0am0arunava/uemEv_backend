@@ -49,7 +49,7 @@ app.post("/scanner", async (req, res) => {
       const scanDetails = req.body;
       console.log("Received scan details:", scanDetails);
 
-      // Check if eventId already exists
+     
       const existingScan = await Scan.findOne({ eventId: scanDetails.eventId });
 
       if (existingScan) {
